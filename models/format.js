@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 
 const FormatSchema = new Schema({
   name: { type: String, required: true, maxLength: 100 },
-  picture_url: { type: String },
 });
 
 FormatSchema.virtual('url').get(function () {

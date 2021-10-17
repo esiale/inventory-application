@@ -5,10 +5,9 @@ const album_controller = require('../controllers/albumController');
 const artist_controller = require('../controllers/artistController');
 const format_controller = require('../controllers/formatController');
 const genre_controller = require('../controllers/genreController');
-const label_controller = require('../controllers/labelController');
 
 router.get('/', function (req, res) {
-  res.send('index');
+  res.render('index.ejs', { title: 'Music Store Inventory Application' });
 });
 
 router.get('/album/create', album_controller.album_create_get);
@@ -58,17 +57,5 @@ router.post('/format/:id/update', format_controller.format_update_post);
 
 router.get('/format/:id', format_controller.format_detail);
 router.get('/formats', format_controller.format_list);
-
-router.get('/label/create', label_controller.label_create_get);
-router.post('/label/create', label_controller.label_create_post);
-
-router.get('/label/:id/delete', label_controller.label_delete_get);
-router.post('/label/:id/delete', label_controller.label_delete_post);
-
-router.get('/label/:id/update', label_controller.label_update_get);
-router.post('/label/:id/update', label_controller.label_update_post);
-
-router.get('/label/:id', label_controller.label_detail);
-router.get('/labels', label_controller.label_list);
 
 module.exports = router;
