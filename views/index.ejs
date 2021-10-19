@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <%- include('./partials/head'); %>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    <img src="/images/pinkfloyd.jpg" />
+    <div class="wrapper">
+      <%- include('./partials/header'); %>
+      <main>
+        <%- include('./partials/nav'); %>
+        <div class="content">CONTENT CONTENT</div>
+      </main>
+      <%- include('./partials/footer'); %>
+    </div>
   </body>
 </html>
