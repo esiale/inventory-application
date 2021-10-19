@@ -2,7 +2,7 @@
 
 const userArgs = process.argv.slice(2);
 const Album = require('./models/album');
-const AlbumInstance = require('./models/albumInstance');
+const Product = require('./models/product');
 const Artist = require('./models/artist');
 const Format = require('./models/format');
 const Genre = require('./models/genre');
@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const albums = [];
-const albumInstances = [];
+const products = [];
 const artists = [];
 const formats = [];
 const genres = [];
@@ -34,17 +34,17 @@ const albumCreate = (name, artist, released, genre, label, picture_url) => {
   });
 };
 
-const albumInstanceCreate = (album, format, price, number_in_stock) => {
-  const albumInstance = new AlbumInstance({
+const productCreate = (album, format, price, number_in_stock) => {
+  const product = new Product({
     album: album,
     format: format,
     price: price,
     number_in_stock: number_in_stock,
   });
 
-  return albumInstance.save().then(() => {
-    console.log('New Album Instance: ' + albumInstance);
-    albumInstances.push(albumInstance);
+  return product.save().then(() => {
+    console.log('New Product: ' + product);
+    products.push(product);
   });
 };
 
@@ -80,19 +80,19 @@ const createFormats = async () => {
 };
 
 const createGenres = async () => {
-  return await genreCreate('Progressive rock')
+  return genreCreate('Progressive rock')
     .then(() => genreCreate('Acoustic rock'))
     .then(() => genreCreate('Indie folk'));
 };
 
 const createArtists = async () => {
-  return await artistCreate('Pink Floyd', '/images/pinkfloyd.jpg').then(() =>
+  return artistCreate('Pink Floyd', '/images/pinkfloyd.jpg').then(() =>
     artistCreate('John Frusciante', '/images/frusciante.jpg')
   );
 };
 
 const createAlbums = async () => {
-  return await albumCreate(
+  return albumCreate(
     'The Wall',
     artists[0],
     '1979',
@@ -122,22 +122,12 @@ const createAlbums = async () => {
     );
 };
 
-const createAlbumInstances = async () => {
-  const theWallCD = albumInstanceCreate(albums[0], formats[0], 17.0, 9);
-  const theWallVinyl = albumInstanceCreate(albums[0], formats[1], 51.99, 3);
-  const theDivisionBellCD = albumInstanceCreate(
-    albums[1],
-    formats[0],
-    10.99,
-    5
-  );
-  const theDivisionBellVinyl = albumInstanceCreate(
-    albums[1],
-    formats[1],
-    30.43,
-    2
-  );
-  const curtainsCD = albumInstanceCreate(albums[2], formats[0], 36.94, 2);
+const createProducts = async () => {
+  const theWallCD = productCreate(albums[0], formats[0], 17.0, 9);
+  const theWallVinyl = productCreate(albums[0], formats[1], 51.99, 3);
+  const theDivisionBellCD = productCreate(albums[1], formats[0], 10.99, 5);
+  const theDivisionBellVinyl = productCreate(albums[1], formats[1], 30.43, 2);
+  const curtainsCD = productCreate(albums[2], formats[0], 36.94, 2);
 
   return Promise.all([
     theWallCD,
@@ -151,7 +141,7 @@ const createAlbumInstances = async () => {
 const populate = () => {
   Promise.all([createFormats(), createGenres(), createArtists()])
     .then(() => createAlbums())
-    .then(() => createAlbumInstances())
+    .then(() => createProducts())
     .catch((error) => {
       console.log(error);
     })

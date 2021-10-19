@@ -1,4 +1,4 @@
-var Album = require('../models/album');
+const Album = require('../models/album');
 
 exports.album_list = function (req, res) {
   res.send('NOT IMPLEMENTED');

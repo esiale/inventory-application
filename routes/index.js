@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 const album_controller = require('../controllers/albumController');
-const album_instance_controller = require('../controllers/albumInstanceController');
+const product_controller = require('../controllers/productController');
 const artist_controller = require('../controllers/artistController');
 const format_controller = require('../controllers/formatController');
 const genre_controller = require('../controllers/genreController');
 
 router.get('/', function (req, res) {
-  res.render('index.ejs', { title: 'Music Store Inventory Application' });
+  res.redirect('/products');
 });
 
 router.get('/album/create', album_controller.album_create_get);
@@ -23,38 +23,17 @@ router.post('/album/:id/update', album_controller.album_update_post);
 router.get('/album/:id', album_controller.album_detail);
 router.get('/albums', album_controller.album_list);
 
-router.get(
-  '/albuminstance/create',
-  album_instance_controller.album_instance_create_get
-);
-router.post(
-  '/albuminstance/create',
-  album_instance_controller.album_instance_create_post
-);
+router.get('/product/create', product_controller.product_create_get);
+router.post('/product/create', product_controller.product_create_post);
 
-router.get(
-  '/albuminstance/:id/delete',
-  album_instance_controller.album_instance_delete_get
-);
-router.post(
-  '/albuminstance/:id/delete',
-  album_instance_controller.album_instance_delete_post
-);
+router.get('/product/:id/delete', product_controller.product_delete_get);
+router.post('/product/:id/delete', product_controller.product_delete_post);
 
-router.get(
-  '/albuminstance/:id/update',
-  album_instance_controller.album_instance_update_get
-);
-router.post(
-  '/albuminstance/:id/update',
-  album_instance_controller.album_instance_update_post
-);
+router.get('/product/:id/update', product_controller.product_update_get);
+router.post('/product/:id/update', product_controller.product_update_post);
 
-router.get(
-  '/albuminstance/:id',
-  album_instance_controller.album_instance_detail
-);
-router.get('/albuminstances', album_instance_controller.album_instance_list);
+router.get('/product/:id', product_controller.product_detail);
+router.get('/products', product_controller.product_list);
 
 router.get('/artist/create', artist_controller.artist_create_get);
 router.post('/artist/create', artist_controller.artist_create_post);

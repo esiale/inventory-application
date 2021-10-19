@@ -1,4 +1,4 @@
-var Artist = require('../models/artist');
+const Artist = require('../models/artist');
 
 exports.artist_list = function (req, res) {
   res.send('NOT IMPLEMENTED');

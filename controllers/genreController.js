@@ -1,4 +1,4 @@
-var Genre = require('../models/genre');
+const Genre = require('../models/genre');
 
 exports.genre_list = function (req, res) {
   res.send('NOT IMPLEMENTED');

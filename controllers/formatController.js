@@ -1,4 +1,4 @@
-var Format = require('../models/format');
+const Format = require('../models/format');
 
 exports.format_list = function (req, res) {
   res.send('NOT IMPLEMENTED');
