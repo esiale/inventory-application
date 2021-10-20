@@ -7,7 +7,7 @@ const FormatSchema = new Schema({
 });
 
 FormatSchema.virtual('url').get(function () {
-  return '/format' + this._id;
+  return '/format/' + this._id;
 });
 
 module.exports = mongoose.model('Format', FormatSchema);

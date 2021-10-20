@@ -4,6 +4,7 @@
   --header: hsl(202, 20%, 34%);
   --nav: hsl(202, 20%, 80%);
   --background: hsl(0, 0%, 95%);
+  --accent: hsl(317, 11%, 36%);
 }
 
 * {
@@ -16,6 +17,10 @@
 body {
   background-color: var(--background);
   font-family: 'Poppins', sans-serif;
+}
+
+a {
+  color: var(--accent);
 }
 
 .wrapper {
@@ -72,4 +77,44 @@ footer a {
   align-items: center;
   gap: 7px;
   color: hsl(0, 0%, 80%);
+}
+
+.content {
+  padding: 15px;
+  width: 100%;
+}
+
+.content-title {
+  font-size: 1.2rem;
+}
+
+/* Product list */
+
+.listing {
+  margin-bottom: 15px;
+}
+
+.product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.product-list-entry {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-list-entry-info {
+  font-size: 1.1rem;
+}
+
+/* Album list */
+
+.albums-container {
+  display: flex;
+  flex-direction: column;
+  margin: 15px;
+  gap: 5px;
+  font-size: 1.1rem;
 }
