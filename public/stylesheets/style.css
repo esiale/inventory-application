@@ -84,8 +84,22 @@ footer a {
   width: 100%;
 }
 
-.content-title {
+h1,
+h2,
+h3 {
+  font-weight: 400;
+}
+
+h1 {
   font-size: 1.2rem;
+}
+
+h2 {
+  font-size: 1.1rem;
+}
+
+h3 {
+  font-size: 1.1rem;
 }
 
 /* Product list */
@@ -109,12 +123,26 @@ footer a {
   font-size: 1.1rem;
 }
 
-/* Album list */
+/* Lists & Details */
 
-.albums-container {
+.list-container,
+.detail-text {
   display: flex;
   flex-direction: column;
   margin: 15px;
   gap: 5px;
   font-size: 1.1rem;
+}
+
+.detail-container {
+  display: flex;
+}
+
+.detail-container img {
+  width: 300px;
+  height: 300px;
+  margin-top: 20px;
+  margin-left: 30px;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }

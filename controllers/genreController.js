@@ -1,7 +1,15 @@
 const Genre = require('../models/genre');
 
-exports.genre_list = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.genre_list = function (req, res, next) {
+  Genre.find()
+    .sort({ name: 1 })
+    .exec(function (err, genre_list) {
+      if (err) return next(err);
+      res.render('genre_list', {
+        title: 'InventoryApp - genres',
+        genre_list: genre_list,
+      });
+    });
 };
 
 exports.genre_detail = function (req, res) {

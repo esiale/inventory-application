@@ -9,12 +9,10 @@
       <main>
         <%- include('./partials/nav'); %>
         <div class="content">
-          <h1>Viewing albums</h1>
+          <h1>Viewing artists</h1>
           <div class="list-container">
-            <% album_list.forEach((album) => { %>
-            <a href="<%= album.url %>"
-              ><%= album.name %> - <%= album.artist.name %>
-            </a>
+            <% artist_list.forEach((artist) => { %>
+            <a href="<%= artist.url %>"><%= artist.name %> </a>
             <%})%>
           </div>
         </div>

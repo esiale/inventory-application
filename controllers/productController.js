@@ -24,8 +24,21 @@ exports.product_list = (req, res, next) => {
     });
 };
 
-exports.product_detail = function (req, res) {
-  res.send('NOT IMPLEMENTED' + req.params.id);
+exports.product_detail = function (req, res, next) {
+  Product.findById(req.params.id)
+    .populate('album')
+    .populate('format')
+    .populate({
+      path: 'album',
+      populate: { path: 'artist' },
+    })
+    .exec(function (err, result) {
+      if (err) return next(err);
+      res.render('product_detail', {
+        title: 'InventoryApp -' + result.album.name,
+        result: result,
+      });
+    });
 };
 
 exports.product_create_get = function (req, res) {
