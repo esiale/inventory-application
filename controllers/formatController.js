@@ -1,4 +1,6 @@
 const Format = require('../models/format');
+const Product = require('../models/format');
+const mongoose = require('mongoose');
 
 exports.format_list = function (req, res, next) {
   Format.find()
@@ -12,8 +14,33 @@ exports.format_list = function (req, res, next) {
     });
 };
 
-exports.format_detail = function (req, res) {
-  res.send('NOT IMPLEMENTED' + req.params.id);
+exports.format_detail = function (req, res, next) {
+  const id = mongoose.Types.ObjectId(req.params.id);
+  const fetch_format = Format.findById(id).sort({ name: 1 }).exec();
+  const fetch_products = Product.find({ format: id })
+    .sort({ format: 1 })
+    .populate('album')
+    .populate({
+      path: 'album',
+      populate: 'artist',
+    })
+    .exec();
+  Promise.all([fetch_format, fetch_products])
+    .then((results) => {
+      if (results[0] == null) {
+        const err = new Error('Format not found');
+        err.status = 404;
+        return next(err);
+      }
+      res.render('format_detail', {
+        title: `InventoryApp - ${results[0].name}`,
+        format_detail: results[0],
+        products: results[1],
+      });
+    })
+    .catch((error) => {
+      next(error);
+    });
 };
 
 exports.format_create_get = function (req, res) {
