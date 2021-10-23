@@ -20,9 +20,11 @@ exports.genre_detail = function (req, res, next) {
   const fetch_genre = Genre.findById(id).sort({ name: 1 }).exec();
   const fetch_albums = Album.find({ genre: id }).sort({ name: 1 }).exec();
   const fetch_products = Product.find({ genre: id })
-    .sort({ album: 1 })
+    .sort({ format: 1 })
     .populate('album')
     .populate('artist')
+    .populate('genre')
+    .populate('format')
     .exec();
   Promise.all([fetch_genre, fetch_albums, fetch_products])
     .then((results) => {

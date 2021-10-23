@@ -34,11 +34,19 @@ const albumCreate = (name, artist, released, genre, label, picture_url) => {
   });
 };
 
-const productCreate = (album, artist, format, price, number_in_stock) => {
+const productCreate = (
+  album,
+  artist,
+  format,
+  genre,
+  price,
+  number_in_stock
+) => {
   const product = new Product({
     album: album,
     artist: artist,
     format: format,
+    genre: genre,
     price: price,
     number_in_stock: number_in_stock,
   });
@@ -124,11 +132,19 @@ const createAlbums = async () => {
 };
 
 const createProducts = async () => {
-  const theWallCD = productCreate(albums[0], artists[0], formats[0], 17.0, 9);
+  const theWallCD = productCreate(
+    albums[0],
+    artists[0],
+    formats[0],
+    genres[0],
+    17.0,
+    9
+  );
   const theWallVinyl = productCreate(
     albums[0],
     artists[0],
     formats[1],
+    genres[0],
     51.99,
     3
   );
@@ -136,6 +152,7 @@ const createProducts = async () => {
     albums[1],
     artists[0],
     formats[0],
+    genres[0],
     10.99,
     5
   );
@@ -143,10 +160,18 @@ const createProducts = async () => {
     albums[1],
     artists[0],
     formats[1],
+    genres[0],
     30.43,
     2
   );
-  const curtainsCD = productCreate(albums[2], artists[1], formats[0], 36.94, 2);
+  const curtainsCD = productCreate(
+    albums[2],
+    artists[1],
+    formats[0],
+    [genres[1], genres[2]],
+    36.94,
+    2
+  );
 
   return Promise.all([
     theWallCD,

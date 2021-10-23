@@ -1,5 +1,5 @@
 const Format = require('../models/format');
-const Product = require('../models/format');
+const Product = require('../models/product');
 const mongoose = require('mongoose');
 
 exports.format_list = function (req, res, next) {
