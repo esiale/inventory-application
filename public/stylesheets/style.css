@@ -23,6 +23,10 @@ a {
   color: var(--accent);
 }
 
+ul {
+  list-style-type: none;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -92,6 +96,7 @@ h3 {
 
 h1 {
   font-size: 1.2rem;
+  margin-bottom: 5px;
 }
 
 h2 {

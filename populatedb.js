@@ -97,7 +97,7 @@ const createAlbums = async () => {
     artists[0],
     '1979',
     genres[0],
-    'Harvest (UK) &bull; Columbia (US)',
+    'Harvest (UK), Columbia (US)',
     '/images/pinkfloyd_thewall.jpg'
   )
     .then(() =>

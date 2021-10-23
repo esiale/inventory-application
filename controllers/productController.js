@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const mongoose = require('mongoose');
 
 exports.product_list = (req, res, next) => {
   const count_products = Product.countDocuments({}).exec();
@@ -25,7 +26,8 @@ exports.product_list = (req, res, next) => {
 };
 
 exports.product_detail = function (req, res, next) {
-  Product.findById(req.params.id)
+  const id = mongoose.Types.ObjectId(req.params.id);
+  Product.findById(id)
     .populate('album')
     .populate('format')
     .populate({
@@ -34,8 +36,13 @@ exports.product_detail = function (req, res, next) {
     })
     .exec(function (err, result) {
       if (err) return next(err);
+      if (result == null) {
+        const err = new Error('Product not found');
+        err.status = 404;
+        return next(err);
+      }
       res.render('product_detail', {
-        title: 'InventoryApp -' + result.album.name,
+        title: `InventoryApp - ${result.album.name}`,
         result: result,
       });
     });
