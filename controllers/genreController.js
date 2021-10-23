@@ -22,10 +22,7 @@ exports.genre_detail = function (req, res, next) {
   const fetch_products = Product.find({ genre: id })
     .sort({ album: 1 })
     .populate('album')
-    .populate({
-      path: 'album',
-      populate: { path: 'artist' },
-    })
+    .populate('artist')
     .exec();
   Promise.all([fetch_genre, fetch_albums, fetch_products])
     .then((results) => {

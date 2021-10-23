@@ -9,36 +9,29 @@
       <main>
         <%- include('./partials/nav'); %>
         <div class="content">
-          <h1>Viewing album's details</h1>
-          <h2><%= album_detail.name %></h2>
+          <h1>Viewing artist's details</h1>
+          <h2><%= artist_detail.name %></h2>
           <div class="detail-container">
             <div class="detail-text">
-              <h3>Artist:</h3>
-              <a href="<%= album_detail.artist.url %>"
-                ><%= album_detail.artist.name %></a
-              >
-              <h3>Released:</h3>
-              <%= album_detail.released.getFullYear() %>
-              <h3>Genres:</h3>
+              <h3>Albums:</h3>
               <ul>
-                <% album_detail.genre.forEach((genre) => { %>
-                <li><a href="<%= genre.url %>"><%= genre.name %></a></li>
+                <% albums.forEach((album) => { %>
+                <li><a href="<%= album.url %>"><%= album.name %></a></li>
                 <%})%>
               </ul>
-              <h3>Label:</h3>
-              <%= album_detail.label%>
             </div>
-            <img src="<%= album_detail.picture_url %>" />
+            <img src="<%= artist_detail.picture_url %>" />
           </div>
           <div class="detail-list">
             <h2>Listing products:</h2>
             <% if (!products.length) { %> Currently there's no products for this
-            album. <%} else { %>
+            artist. <%} else { %>
             <ul>
               <% products.forEach((product) => { %>
               <li>
                 <a href="<%= product.url %>"
-                  ><%= product.format.name %> - <%=product._id%></a
+                  ><%= product.format.name %> - <%= product.album.name %> -
+                  <%=product._id%></a
                 >
               </li>
               <%})%>

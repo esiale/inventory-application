@@ -7,10 +7,7 @@ exports.product_list = (req, res, next) => {
     .sort({ format: 1 })
     .populate('album')
     .populate('format')
-    .populate({
-      path: 'album',
-      populate: { path: 'artist' },
-    })
+    .populate('artist')
     .exec();
   Promise.all([count_products, fetch_products])
     .then((results) => {
@@ -30,10 +27,7 @@ exports.product_detail = function (req, res, next) {
   Product.findById(id)
     .populate('album')
     .populate('format')
-    .populate({
-      path: 'album',
-      populate: { path: 'artist' },
-    })
+    .populate('artist')
     .exec(function (err, result) {
       if (err) return next(err);
       if (result == null) {

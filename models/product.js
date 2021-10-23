@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const ProductSchema = new Schema({
   album: { type: Schema.Types.ObjectId, ref: 'Album', required: true },
+  artist: { type: Schema.Types.ObjectId, ref: 'Artist', required: true },
   format: { type: Schema.Types.ObjectId, ref: 'Format', required: true },
   price: { type: Number, required: true },
   number_in_stock: { type: Number, required: true },

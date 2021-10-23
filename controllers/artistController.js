@@ -20,13 +20,9 @@ exports.artist_detail = function (req, res, next) {
   const fetch_artist = Artist.findById(id).sort({ name: 1 }).exec();
   const fetch_albums = Album.find({ artist: id }).sort({ name: 1 }).exec();
   const fetch_products = Product.find({ artist: id })
-    .sort({ album: 1 })
+    .sort({ format: 1 })
     .populate('album')
     .populate('format')
-    .populate({
-      path: 'album',
-      populate: { path: 'artist' },
-    })
     .exec();
   Promise.all([fetch_artist, fetch_albums, fetch_products])
     .then((results) => {
