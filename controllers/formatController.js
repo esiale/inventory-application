@@ -19,8 +19,12 @@ exports.format_detail = function (req, res, next) {
   const fetch_format = Format.findById(id).sort({ name: 1 }).exec();
   const fetch_products = Product.find({ format: id })
     .sort({ format: 1 })
-    .populate('album')
-    .populate('artist')
+    .populate({
+      path: 'album',
+      populate: {
+        path: 'artist',
+      },
+    })
     .exec();
   Promise.all([fetch_format, fetch_products])
     .then((results) => {

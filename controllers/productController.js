@@ -5,9 +5,11 @@ exports.product_list = (req, res, next) => {
   const count_products = Product.countDocuments({}).exec();
   const fetch_products = Product.find()
     .sort({ format: 1 })
-    .populate('album')
     .populate('format')
-    .populate('artist')
+    .populate({
+      path: 'album',
+      populate: { path: 'artist' },
+    })
     .exec();
   Promise.all([count_products, fetch_products])
     .then((results) => {
@@ -25,9 +27,11 @@ exports.product_list = (req, res, next) => {
 exports.product_detail = function (req, res, next) {
   const id = mongoose.Types.ObjectId(req.params.id);
   Product.findById(id)
-    .populate('album')
     .populate('format')
-    .populate('artist')
+    .populate({
+      path: 'album',
+      populate: { path: 'artist' },
+    })
     .exec(function (err, result) {
       if (err) return next(err);
       if (result == null) {

@@ -1,6 +1,5 @@
 const Artist = require('../models/artist');
 const Album = require('../models/album');
-const Product = require('../models/product');
 const mongoose = require('mongoose');
 
 exports.artist_list = function (req, res, next) {
@@ -19,11 +18,58 @@ exports.artist_detail = function (req, res, next) {
   const id = mongoose.Types.ObjectId(req.params.id);
   const fetch_artist = Artist.findById(id).sort({ name: 1 }).exec();
   const fetch_albums = Album.find({ artist: id }).sort({ name: 1 }).exec();
-  const fetch_products = Product.find({ artist: id })
-    .sort({ format: 1 })
-    .populate('album')
-    .populate('format')
-    .exec();
+  const fetch_products = Album.aggregate([
+    {
+      $match: { artist: id },
+    },
+    {
+      $lookup: {
+        from: 'products',
+        localField: '_id',
+        foreignField: 'album',
+        as: 'product_info',
+      },
+    },
+    {
+      $unwind: {
+        path: '$product_info',
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        'product_info._id': 1,
+        'product_info.format': 1,
+        url: {
+          $concat: [
+            '/product/',
+            {
+              $toString: '$product_info._id',
+            },
+          ],
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: 'formats',
+        localField: 'product_info.format',
+        foreignField: '_id',
+        as: 'product_info.format',
+      },
+    },
+    {
+      $unwind: {
+        path: '$product_info.format',
+      },
+    },
+    {
+      $sort: {
+        'product_info.format.name': 1,
+      },
+    },
+  ]).exec();
   Promise.all([fetch_artist, fetch_albums, fetch_products])
     .then((results) => {
       if (results[0] == null) {

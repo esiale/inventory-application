@@ -19,13 +19,82 @@ exports.genre_detail = function (req, res, next) {
   const id = mongoose.Types.ObjectId(req.params.id);
   const fetch_genre = Genre.findById(id).sort({ name: 1 }).exec();
   const fetch_albums = Album.find({ genre: id }).sort({ name: 1 }).exec();
-  const fetch_products = Product.find({ genre: id })
-    .sort({ format: 1 })
-    .populate('album')
-    .populate('artist')
-    .populate('genre')
-    .populate('format')
-    .exec();
+  // const fetch_products = Product.find({ genre: id })
+  //   .sort({ format: 1 })
+  //   .populate({
+  //     path: 'album',
+  //     populate: {
+  //       path: 'artist',
+  //     },
+  //   })
+  //   .populate('format')
+  //   .exec();
+  const fetch_products = Album.aggregate([
+    {
+      $match: { genre: id },
+    },
+    {
+      $lookup: {
+        from: 'products',
+        localField: '_id',
+        foreignField: 'album',
+        as: 'product_info',
+      },
+    },
+    {
+      $unwind: {
+        path: '$product_info',
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        name: 1,
+        'product_info._id': 1,
+        'product_info.format': 1,
+        artist: 1,
+        url: {
+          $concat: [
+            '/product/',
+            {
+              $toString: '$product_info._id',
+            },
+          ],
+        },
+      },
+    },
+    {
+      $lookup: {
+        from: 'formats',
+        localField: 'product_info.format',
+        foreignField: '_id',
+        as: 'product_info.format',
+      },
+    },
+    {
+      $unwind: {
+        path: '$product_info.format',
+      },
+    },
+    {
+      $lookup: {
+        from: 'artists',
+        localField: 'artist',
+        foreignField: '_id',
+        as: 'product_info.artist',
+      },
+    },
+    {
+      $unwind: {
+        path: '$product_info.artist',
+      },
+    },
+    {
+      $sort: {
+        'product_info.format.name': 1,
+      },
+    },
+  ]).exec();
   Promise.all([fetch_genre, fetch_albums, fetch_products])
     .then((results) => {
       if (results[0] == null) {

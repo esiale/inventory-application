@@ -29,8 +29,9 @@
               <% products.forEach((product) => { %>
               <li>
                 <a href="<%= product.url %>"
-                  ><%= product.format.name %> - <%= product.album.name %> - <%=
-                  product.artist.name %> - <%=product._id%></a
+                  ><%= product.product_info.format.name %> - <%= product.name %>
+                  - <%= product.product_info.artist.name %> -
+                  <%=product.product_info._id%></a
                 >
               </li>
               <%})%>
