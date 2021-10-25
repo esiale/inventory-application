@@ -2,11 +2,12 @@ const Genre = require('../models/genre');
 const Album = require('../models/album');
 const Product = require('../models/product');
 const mongoose = require('mongoose');
+const { body, validationResult } = require('express-validator');
 
-exports.genre_list = function (req, res, next) {
+exports.genre_list = (req, res, next) => {
   Genre.find()
     .sort({ name: 1 })
-    .exec(function (err, genre_list) {
+    .exec((err, genre_list) => {
       if (err) return next(err);
       res.render('genre_list', {
         title: 'InventoryApp - genres',
@@ -15,20 +16,10 @@ exports.genre_list = function (req, res, next) {
     });
 };
 
-exports.genre_detail = function (req, res, next) {
+exports.genre_detail = (req, res, next) => {
   const id = mongoose.Types.ObjectId(req.params.id);
   const fetch_genre = Genre.findById(id).sort({ name: 1 }).exec();
   const fetch_albums = Album.find({ genre: id }).sort({ name: 1 }).exec();
-  // const fetch_products = Product.find({ genre: id })
-  //   .sort({ format: 1 })
-  //   .populate({
-  //     path: 'album',
-  //     populate: {
-  //       path: 'artist',
-  //     },
-  //   })
-  //   .populate('format')
-  //   .exec();
   const fetch_products = Album.aggregate([
     {
       $match: { genre: id },
@@ -114,13 +105,36 @@ exports.genre_detail = function (req, res, next) {
     });
 };
 
-exports.genre_create_get = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.genre_create_get = (req, res, next) => {
+  res.render('genre_form', { title: 'InventoryApp - create genre' });
 };
 
-exports.genre_create_post = function (req, res) {
-  res.send('NOT IMPLEMENTED');
-};
+exports.genre_create_post = [
+  body('name', 'Genre name required').trim().isLength({ min: 1 }).escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const genre = new Genre({ name: req.body.name });
+    if (!errors.isEmpty()) {
+      res.render('genre_form', {
+        title: 'InventoryApp - create genre',
+        genre: genre,
+        errors: errors.array(),
+      });
+    } else {
+      Genre.findOne({ name: req.body.name }).exec((err, found_genre) => {
+        if (err) return next(err);
+        if (found_genre) {
+          res.redirect(found_genre.url);
+        } else {
+          genre.save((err) => {
+            if (err) return next(err);
+            res.redirect(genre.url);
+          });
+        }
+      });
+    }
+  },
+];
 
 exports.genre_delete_get = function (req, res) {
   res.send('NOT IMPLEMENTED');

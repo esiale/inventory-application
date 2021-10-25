@@ -24,7 +24,7 @@ exports.product_list = (req, res, next) => {
     });
 };
 
-exports.product_detail = function (req, res, next) {
+exports.product_detail = (req, res, next) => {
   const id = mongoose.Types.ObjectId(req.params.id);
   Product.findById(id)
     .populate('format')

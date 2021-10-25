@@ -2,10 +2,10 @@ const Format = require('../models/format');
 const Product = require('../models/product');
 const mongoose = require('mongoose');
 
-exports.format_list = function (req, res, next) {
+exports.format_list = (req, res, next) => {
   Format.find()
     .sort({ name: 1 })
-    .exec(function (err, format_list) {
+    .exec((err, format_list) => {
       if (err) return next(err);
       res.render('format_list', {
         title: 'InventoryApp - formats',
@@ -14,7 +14,7 @@ exports.format_list = function (req, res, next) {
     });
 };
 
-exports.format_detail = function (req, res, next) {
+exports.format_detail = (req, res, next) => {
   const id = mongoose.Types.ObjectId(req.params.id);
   const fetch_format = Format.findById(id).sort({ name: 1 }).exec();
   const fetch_products = Product.find({ format: id })

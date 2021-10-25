@@ -2,10 +2,10 @@ const Artist = require('../models/artist');
 const Album = require('../models/album');
 const mongoose = require('mongoose');
 
-exports.artist_list = function (req, res, next) {
+exports.artist_list = (req, res, next) => {
   Artist.find()
     .sort({ name: 1 })
-    .exec(function (err, artist_list) {
+    .exec((err, artist_list) => {
       if (err) return next(err);
       res.render('artist_list', {
         title: 'InventoryApp - artists',
@@ -14,7 +14,7 @@ exports.artist_list = function (req, res, next) {
     });
 };
 
-exports.artist_detail = function (req, res, next) {
+exports.artist_detail = (req, res, next) => {
   const id = mongoose.Types.ObjectId(req.params.id);
   const fetch_artist = Artist.findById(id).sort({ name: 1 }).exec();
   const fetch_albums = Album.find({ artist: id }).sort({ name: 1 }).exec();

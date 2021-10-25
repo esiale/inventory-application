@@ -2,11 +2,11 @@ const Album = require('../models/album');
 const Product = require('../models/product');
 const mongoose = require('mongoose');
 
-exports.album_list = function (req, res, next) {
+exports.album_list = (req, res, next) => {
   Album.find()
     .sort({ name: 1 })
     .populate('artist')
-    .exec(function (err, album_list) {
+    .exec((err, album_list) => {
       if (err) return next(err);
       res.render('album_list', {
         title: 'InventoryApp - albums',
@@ -15,7 +15,7 @@ exports.album_list = function (req, res, next) {
     });
 };
 
-exports.album_detail = function (req, res, next) {
+exports.album_detail = (req, res, next) => {
   const id = mongoose.Types.ObjectId(req.params.id);
   const fetch_album = Album.findById(id)
     .sort({ name: 1 })
