@@ -106,7 +106,7 @@ exports.genre_detail = (req, res, next) => {
 };
 
 exports.genre_create_get = (req, res, next) => {
-  res.render('genre_form', { title: 'InventoryApp - create genre' });
+  res.render('genre_form', { title: 'InventoryApp - add genre' });
 };
 
 exports.genre_create_post = [
@@ -116,7 +116,7 @@ exports.genre_create_post = [
     const genre = new Genre({ name: req.body.name });
     if (!errors.isEmpty()) {
       res.render('genre_form', {
-        title: 'InventoryApp - create genre',
+        title: 'InventoryApp - add genre',
         genre: genre,
         errors: errors.array(),
       });

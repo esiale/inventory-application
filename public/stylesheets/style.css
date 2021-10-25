@@ -155,3 +155,41 @@ h3 {
 .detail-list {
   margin-top: 15px;
 }
+
+/* Forms */
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+input[type='text'] {
+  border: 0;
+  border-bottom: var(--accent) solid 2px;
+  border-radius: 2px 2px 0 0;
+  font-size: 0.9rem;
+  padding: 5px;
+  width: 300px;
+  font-family: inherit;
+}
+
+input[type='submit'] {
+  margin: 15px 0;
+  border: 0;
+  border-radius: 2px;
+  padding: 5px 0;
+  font-size: 0.9rem;
+  width: 150px;
+  background-color: var(--nav);
+  font-family: inherit;
+  transition: background-color 100ms ease-in;
+}
+
+input[type='submit']:hover {
+  background-color: hsl(202, 20%, 75%);
+}
+
+.error {
+  color: hsl(3, 100%, 36%);
+}
