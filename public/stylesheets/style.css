@@ -157,6 +157,10 @@ h3 {
 
 /* Forms */
 
+.form-genre-container {
+  margin-bottom: 10px;
+}
+
 form {
   display: flex;
   flex-direction: column;
@@ -164,7 +168,9 @@ form {
   margin-top: 15px;
 }
 
-input[type='text'] {
+input[type='text'],
+select {
+  background-color: #fff;
   border: 0;
   border-bottom: var(--accent) solid 2px;
   border-radius: 2px 2px 0 0;

@@ -21,13 +21,19 @@ const validateFile = (req, res, next) => {
     'image/jpeg',
     'image/gif',
   ];
+  console.log(req);
   if (!req.file) {
     return next();
   }
   if (!allowedExtensions.includes(req.file.mimetype)) {
     const err = new Error('File type not allowed');
     err.statusCode = 500;
-    next(err);
+    return next(err);
+  }
+  if (req.file.size >= 5242880) {
+    const err = new Error('File is too large');
+    err.statusCode = 500;
+    return next(err);
   }
   next();
 };

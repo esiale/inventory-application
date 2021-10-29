@@ -1,4 +1,6 @@
 const Album = require('../models/album');
+const Artist = require('../models/artist');
+const Genre = require('../models/genre');
 const Product = require('../models/product');
 const mongoose = require('mongoose');
 
@@ -47,13 +49,32 @@ exports.album_detail = (req, res, next) => {
     });
 };
 
-exports.album_create_get = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.album_create_get = (req, res, next) => {
+  const fetch_artists = Artist.find().exec();
+  const fetch_genres = Genre.find().exec();
+  Promise.all([fetch_artists, fetch_genres])
+    .then((results) => {
+      res.render('album_form', {
+        title: 'InventoryApp - add album',
+        artists: results[0],
+        genres: results[1],
+      });
+    })
+    .catch((error) => next(error));
 };
 
-exports.album_create_post = function (req, res) {
-  res.send('NOT IMPLEMENTED');
-};
+exports.album_create_post = [
+  (req, res, next) => {
+    if (!(req.body.genre instanceof Array)) {
+      if (typeof req.body.genre === 'undefined') {
+        req.body.genre = [];
+      } else {
+        req.body.genre = new Array(req.body.genre);
+      }
+    }
+    next();
+  },
+];
 
 exports.album_delete_get = function (req, res) {
   res.send('NOT IMPLEMENTED');

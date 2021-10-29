@@ -19,9 +19,7 @@ exports.product_list = (req, res, next) => {
         product_list: results[1],
       });
     })
-    .catch((error) => {
-      next(error);
-    });
+    .catch((error) => next(error));
 };
 
 exports.product_detail = (req, res, next) => {

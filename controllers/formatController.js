@@ -39,9 +39,7 @@ exports.format_detail = (req, res, next) => {
         products: results[1],
       });
     })
-    .catch((error) => {
-      next(error);
-    });
+    .catch((error) => next(error));
 };
 
 exports.format_create_get = function (req, res) {

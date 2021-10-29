@@ -91,9 +91,7 @@ exports.artist_detail = (req, res, next) => {
         products: results[2],
       });
     })
-    .catch((error) => {
-      next(error);
-    });
+    .catch((error) => next(error));
 };
 
 exports.artist_create_get = (req, res, next) => {

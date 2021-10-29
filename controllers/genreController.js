@@ -99,9 +99,7 @@ exports.genre_detail = (req, res, next) => {
         products: results[2],
       });
     })
-    .catch((error) => {
-      next(error);
-    });
+    .catch((error) => next(error));
 };
 
 exports.genre_create_get = (req, res, next) => {
