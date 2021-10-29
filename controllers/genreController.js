@@ -1,6 +1,5 @@
 const Genre = require('../models/genre');
 const Album = require('../models/album');
-const Product = require('../models/product');
 const mongoose = require('mongoose');
 const { body, validationResult } = require('express-validator');
 
@@ -110,7 +109,13 @@ exports.genre_create_get = (req, res, next) => {
 };
 
 exports.genre_create_post = [
-  body('name', 'Genre name required').trim().isLength({ min: 1 }).escape(),
+  body('name')
+    .trim()
+    .notEmpty()
+    .withMessage('Genre name required')
+    .isLength({ max: 50 })
+    .withMessage('Must be 50 characters or less')
+    .escape(),
   (req, res, next) => {
     const errors = validationResult(req);
     const genre = new Genre({ name: req.body.name });

@@ -144,12 +144,11 @@ h3 {
 }
 
 .detail-container img {
-  width: 300px;
-  height: 300px;
+  max-width: 300px;
   margin-top: 20px;
   margin-left: 30px;
   border-radius: 2px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
 }
 
 .detail-list {
@@ -162,6 +161,7 @@ form {
   display: flex;
   flex-direction: column;
   gap: 7px;
+  margin-top: 15px;
 }
 
 input[type='text'] {
@@ -172,21 +172,22 @@ input[type='text'] {
   padding: 5px;
   width: 300px;
   font-family: inherit;
+  margin-bottom: 15px;
 }
 
-input[type='submit'] {
+button {
   margin: 15px 0;
   border: 0;
   border-radius: 2px;
   padding: 5px 0;
   font-size: 0.9rem;
-  width: 150px;
+  width: 140px;
   background-color: var(--nav);
   font-family: inherit;
   transition: background-color 100ms ease-in;
 }
 
-input[type='submit']:hover {
+button:hover {
   background-color: hsl(202, 20%, 75%);
 }
 

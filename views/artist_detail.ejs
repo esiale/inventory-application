@@ -14,11 +14,13 @@
           <div class="detail-container">
             <div class="detail-text">
               <h3>Albums:</h3>
+              <% if(!albums.length) { %> This artist has no albums. <%} else {%>
               <ul>
                 <% albums.forEach((album) => { %>
                 <li><a href="<%= album.url %>"><%= album.name %></a></li>
                 <%})%>
               </ul>
+              <%}%>
             </div>
             <img src="<%= artist_detail.picture_url %>" />
           </div>
