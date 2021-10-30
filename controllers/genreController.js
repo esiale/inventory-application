@@ -110,9 +110,9 @@ exports.genre_create_post = [
   body('name')
     .trim()
     .notEmpty()
-    .withMessage('Genre name required')
+    .withMessage('* Genre name is required')
     .isLength({ max: 50 })
-    .withMessage('Must be 50 characters or less')
+    .withMessage('* Genre name must be 50 characters or less')
     .escape(),
   (req, res, next) => {
     const errors = validationResult(req);
@@ -121,7 +121,7 @@ exports.genre_create_post = [
       res.render('genre_form', {
         title: 'InventoryApp - add genre',
         genre: genre,
-        errors: errors.array(),
+        errors: errors.array({ onlyFirstError: true }),
       });
     } else {
       Genre.findOne({ name: req.body.name }).exec((err, found_genre) => {

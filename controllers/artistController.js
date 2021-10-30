@@ -103,9 +103,9 @@ exports.artist_create_post = [
   body('name')
     .trim()
     .notEmpty()
-    .withMessage('Artist name required')
+    .withMessage('* Artist name is required')
     .isLength({ max: 50 })
-    .withMessage('Must be 50 characters or less')
+    .withMessage('* Artist name must be 50 characters or less')
     .escape(),
   validateFile,
   (req, res, next) => {
@@ -115,7 +115,7 @@ exports.artist_create_post = [
       res.render('artist_form', {
         title: 'InventoryApp - add artist',
         artist: artist,
-        errors: errors.array(),
+        errors: errors.array({ onlyFirstError: true }),
       });
     } else {
       Artist.findOne({ name: req.body.name }).exec(

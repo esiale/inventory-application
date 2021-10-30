@@ -20,10 +20,12 @@
               <h3>Released:</h3>
               <%= album_detail.released.getFullYear() %>
               <h3>Genres:</h3>
+              <% if (!album_detail.genre.length) { %> No genres specified for
+              this album. <% } else {%>
               <ul>
                 <% album_detail.genre.forEach((genre) => { %>
                 <li><a href="<%= genre.url %>"><%= genre.name %></a></li>
-                <%})%>
+                <%})}%>
               </ul>
               <h3>Label:</h3>
               <%= album_detail.label%>

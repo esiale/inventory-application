@@ -16,8 +16,9 @@
             value=<%!locals.album ? '': album.name %>>
             <label for="artist">Artist:</label>
             <select name="artist">
-              <% if (artists) { artists.forEach((artist) => { %>
-              <option value="<%=artist%>"><%=artist.name%></option>
+              <% if (artists) { artists.sort((a, b) =>
+              a.name.localeCompare(b.name)); artists.forEach((artist) => { %>
+              <option value="<%=artist._id%>"><%=artist.name%></option>
               <%}) }%>
             </select>
             <label for="released">Released:</label>
@@ -31,12 +32,7 @@
               <% if (!genres.length) {%> No genres defined. <%} else {%><%
               genres.forEach((genre) => { %>
               <div class="form-genre-checkbox">
-                <input
-                  type="checkbox"
-                  name="genre"
-                  id="<%=genre%>"
-                  value="<%=genre%>"
-                />
+                <input type="checkbox" name="genre" value="<%=genre._id%>" />
                 <label for="<%=genre%>"><%=genre.name%></label>
               </div>
               <%})}%>
