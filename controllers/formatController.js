@@ -1,6 +1,7 @@
 const Format = require('../models/format');
 const Product = require('../models/product');
 const mongoose = require('mongoose');
+const { body, validationResult } = require('express-validator');
 
 exports.format_list = (req, res, next) => {
   Format.find()
@@ -42,13 +43,42 @@ exports.format_detail = (req, res, next) => {
     .catch((error) => next(error));
 };
 
-exports.format_create_get = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.format_create_get = (req, res, next) => {
+  res.render('format_form', { title: 'InventoryApp - add format' });
 };
 
-exports.format_create_post = function (req, res) {
-  res.send('NOT IMPLEMENTED');
-};
+exports.format_create_post = [
+  body('name')
+    .trim()
+    .notEmpty()
+    .withMessage('* Format name is required')
+    .isLength({ max: 50 })
+    .withMessage('* Format name must be 50 characters or less')
+    .escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const format = new Format({ name: req.body.name });
+    if (!errors.isEmpty()) {
+      res.render('format_form', {
+        title: 'InventoryApp - add format',
+        format: format,
+        errors: errors.array({ onlyFirstError: true }),
+      });
+    } else {
+      Format.findOne({ name: req.body.name }).exec((err, found_format) => {
+        if (err) return next(err);
+        if (found_format) {
+          res.redirect(found_format.url);
+        } else {
+          format.save((err) => {
+            if (err) return next(err);
+            res.redirect(format.url);
+          });
+        }
+      });
+    }
+  },
+];
 
 exports.format_delete_get = function (req, res) {
   res.send('NOT IMPLEMENTED');
