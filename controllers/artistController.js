@@ -178,10 +178,56 @@ exports.artist_delete_post = (req, res, next) => {
     .catch((error) => next(error));
 };
 
-exports.artist_update_get = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.artist_update_get = (req, res, next) => {
+  Artist.findById(req.params.id, (error, results) => {
+    if (error) return next(error);
+    if (results === null) {
+      const error = new Error('Artist not found');
+      error.status = 404;
+      return next(error);
+    }
+    res.render('artist_form', {
+      title: 'InventoryApp - update artist',
+      artist: results,
+    });
+  });
 };
 
-exports.artist_update_post = function (req, res) {
-  res.send('NOT IMPLEMENTED');
-};
+exports.artist_update_post = [
+  uploadImage.single('image'),
+  body('name')
+    .trim()
+    .notEmpty()
+    .withMessage('* Artist name is required')
+    .isLength({ max: 50 })
+    .withMessage('* Artist name must be 50 characters or less')
+    .escape(),
+  validateFile,
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    const artist = new Artist({ name: req.body.name, _id: req.params.id });
+    if (!errors.isEmpty()) {
+      res.render('artist_form', {
+        title: 'InventoryApp - update artist',
+        artist: artist,
+        errors: errors.array({ onlyFirstError: true }),
+      });
+    } else {
+      if (!req.file) {
+        artist.picture_url = req.body.picture_url;
+      } else {
+        const picture_id = `img-${uuidv4()}`;
+        await processImage(req, next, picture_id);
+        artist.picture_url = `/images/${picture_id}`;
+      }
+      Artist.findByIdAndUpdate(
+        req.params.id,
+        artist,
+        (error, updatedArtist) => {
+          if (error) return next(error);
+          res.redirect(updatedArtist.url);
+        }
+      );
+    }
+  },
+];

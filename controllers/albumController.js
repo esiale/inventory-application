@@ -210,7 +210,7 @@ exports.album_update_get = (req, res, next) => {
       }
     }
     res.render('album_form', {
-      title: 'InventoryApp - add album',
+      title: 'InventoryApp - update album',
       album: results[0],
       artists: results[1],
       genres: results[2],
@@ -271,7 +271,7 @@ exports.album_update_post = [
             }
           }
           res.render('album_form', {
-            title: 'InventoryApp - add album',
+            title: 'InventoryApp - update album',
             artists: results[0],
             genres: results[1],
             album: album,
