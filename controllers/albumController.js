@@ -162,7 +162,7 @@ exports.album_delete_get = (req, res, next) => {
     .then((results) => {
       if (results[0] === null) return res.redirect('/albums');
       res.render('album_delete', {
-        title: 'InventoryApp - delete product',
+        title: 'InventoryApp - delete album',
         album: results[0],
         products: results[1],
       });

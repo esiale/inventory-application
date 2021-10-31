@@ -28,6 +28,9 @@
             </div>
             <img src="<%= result.album.picture_url %>" />
           </div>
+          <a href="<%=result.url%>/delete"
+            ><button class="delete-btn">Delete</button></a
+          >
         </div>
       </main>
       <%- include('./partials/footer'); %>

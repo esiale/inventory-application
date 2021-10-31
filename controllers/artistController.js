@@ -142,12 +142,40 @@ exports.artist_create_post = [
   },
 ];
 
-exports.artist_delete_get = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.artist_delete_get = (req, res, next) => {
+  const fetch_artist = Artist.findById(req.params.id).exec();
+  const fetch_albums = Album.find({ artist: req.params.id }).exec();
+  Promise.all([fetch_artist, fetch_albums])
+    .then((results) => {
+      if (results[0] === null) return res.redirect('/artists');
+      res.render('artist_delete', {
+        title: 'InventoryApp - delete artist',
+        artist: results[0],
+        albums: results[1],
+      });
+    })
+    .catch((error) => next(error));
 };
 
-exports.artist_delete_post = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.artist_delete_post = (req, res, next) => {
+  const fetch_artist = Artist.findById(req.params.id).exec();
+  const fetch_albums = Album.find({ artist: req.params.id }).exec();
+  Promise.all([fetch_artist, fetch_albums])
+    .then((results) => {
+      if (results[1].length > 0) {
+        return res.render('artist_delete', {
+          title: 'InventoryApp - delete artist',
+          artist: results[0],
+          albums: results[1],
+        });
+      } else {
+        Artist.findByIdAndRemove(req.params.id, (error) => {
+          if (error) return next(error);
+          res.redirect('/artists');
+        });
+      }
+    })
+    .catch((error) => next(error));
 };
 
 exports.artist_update_get = function (req, res) {

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%- include('./partials/head'); %>
+  </head>
+  <body>
+    <div class="wrapper">
+      <%- include('./partials/header'); %>
+      <main>
+        <%- include('./partials/nav'); %>
+        <div class="content">
+          <h1>Delete an artist:</h1>
+          <h2><%=artist.name %></h2>
+          <% if (albums.length) { %>
+          <div class="delete-item">
+            This artist has the following associated albums:
+            <ul>
+              <% albums.forEach((album) => { %>
+              <li>
+                <a href="<%=album.url%>"><%= album.name %></a>
+              </li>
+              <%})%>
+            </ul>
+            <span class="warning"
+              >You have to delete all albums before proceeding.</span
+            >
+          </div>
+          <%} else {%>
+          <form method="POST" action="">
+            <span class="warning"
+              >This action can't be reversed! Are you sure?</span
+            >
+            <button type="submit">Delete</button>
+          </form>
+          <%}%>
+        </div>
+      </main>
+      <%- include('./partials/footer'); %>
+    </div>
+  </body>
+</html>
