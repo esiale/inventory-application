@@ -153,12 +153,42 @@ exports.album_create_post = [
   },
 ];
 
-exports.album_delete_get = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.album_delete_get = (req, res, next) => {
+  const fetch_album = Album.findById(req.params.id).populate('artist').exec();
+  const fetch_products = Product.find({ album: req.params.id })
+    .populate('format')
+    .exec();
+  Promise.all([fetch_album, fetch_products])
+    .then((results) => {
+      if (results[0] === null) return res.redirect('/albums');
+      res.render('album_delete', {
+        title: 'InventoryApp - delete product',
+        album: results[0],
+        products: results[1],
+      });
+    })
+    .catch((error) => next(error));
 };
 
-exports.album_delete_post = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.album_delete_post = (req, res, next) => {
+  const fetch_album = Album.findById(req.params.id).exec();
+  const fetch_products = Product.find({ album: req.params.id }).exec();
+  Promise.all([fetch_album, fetch_products])
+    .then((results) => {
+      if (results[1].length > 0) {
+        return res.render('album_delete', {
+          title: 'InventoryApp - delete product',
+          album: results[0],
+          products: results[1],
+        });
+      } else {
+        Album.findByIdAndRemove(req.params.id, (error) => {
+          if (error) return next(error);
+          res.redirect('/albums');
+        });
+      }
+    })
+    .catch((error) => next(error));
 };
 
 exports.album_update_get = function (req, res) {

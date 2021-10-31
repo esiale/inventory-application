@@ -201,10 +201,23 @@ button {
   transition: background-color 100ms ease-in;
 }
 
+.delete-btn {
+  margin-top: 15px;
+}
+
 button:hover {
   background-color: hsl(202, 20%, 75%);
 }
 
-.error {
+.error,
+.warning {
   color: hsl(3, 100%, 36%);
+}
+
+/* Delete */
+.delete-item {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
