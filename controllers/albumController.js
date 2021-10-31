@@ -73,7 +73,7 @@ exports.album_create_get = (req, res, next) => {
 exports.album_create_post = [
   uploadImage.single('image'),
   (req, res, next) => {
-    if (!(req.body.genre instanceof Array)) {
+    if (!Array.isArray(req.body.genre)) {
       if (typeof req.body.genre === 'undefined') {
         req.body.genre = [];
       } else {
@@ -100,6 +100,7 @@ exports.album_create_post = [
     .withMessage('* Released year must be a number')
     .escape(),
   body('label').trim().notEmpty().withMessage('* Label is required').escape(),
+  body('genre.*').escape(),
   validateFile,
   (req, res, next) => {
     const errors = validationResult(req);

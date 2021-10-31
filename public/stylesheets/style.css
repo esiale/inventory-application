@@ -169,6 +169,7 @@ form {
 }
 
 input[type='text'],
+input[type='number'],
 select {
   background-color: #fff;
   border: 0;
@@ -181,8 +182,11 @@ select {
   margin-bottom: 15px;
 }
 
+input[type='file'] {
+  margin-bottom: 15px;
+}
+
 button {
-  margin: 15px 0;
   border: 0;
   border-radius: 2px;
   padding: 5px 0;

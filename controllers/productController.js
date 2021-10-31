@@ -1,4 +1,6 @@
 const Product = require('../models/product');
+const Album = require('../models/album');
+const Format = require('../models/format');
 const mongoose = require('mongoose');
 
 exports.product_list = (req, res, next) => {
@@ -44,13 +46,21 @@ exports.product_detail = (req, res, next) => {
     });
 };
 
-exports.product_create_get = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.product_create_get = (req, res, next) => {
+  const fetch_albums = Album.find().exec();
+  const fetch_formats = Format.find().exec();
+  Promise.all([fetch_albums, fetch_formats])
+    .then((results) => {
+      res.render('product_form', {
+        title: 'InventoryApp - add product',
+        albums: results[0],
+        formats: results[1],
+      });
+    })
+    .catch((error) => next(error));
 };
 
-exports.product_create_post = function (req, res) {
-  res.send('NOT IMPLEMENTED');
-};
+exports.product_create_post = (req, res, next) => {};
 
 exports.product_delete_get = function (req, res) {
   res.send('NOT IMPLEMENTED');

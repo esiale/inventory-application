@@ -13,7 +13,7 @@
           <form method="post" action="" enctype="multipart/form-data">
             <label for="name">Artist:</label>
             <input type="text" placeholder="Name" name="name"
-            value=<%!locals.artist ? '': artist.name %>>
+            value=<%=!locals.artist ? '': artist.name %>>
             <label for="image">Image (optional):</label>
             <input type="file" name="image" />
             <button type="submit">Submit</button>

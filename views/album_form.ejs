@@ -12,28 +12,44 @@
           <h1>Add new album</h1>
           <form method="post" action="" enctype="multipart/form-data">
             <label for="name">Album:</label>
-            <input type="text" placeholder="Name" name="name"
-            value=<%!locals.album ? '': album.name %>>
+            <input
+              type="text"
+              placeholder="Name"
+              name="name"
+              value="<%= !locals.album ? '' : album.name %>"
+            />
             <label for="artist">Artist:</label>
             <select name="artist">
-              <% if (artists) { artists.sort((a, b) =>
+            <% if (artists) { artists.sort((a, b) =>
               a.name.localeCompare(b.name)); artists.forEach((artist) => { %>
-              <option value="<%=artist._id%>"><%=artist.name%></option>
+              <option value="<%=artist._id%>" <% if (locals.album && artist._id.toString() === locals.album.artist.toString()) { %>
+                selected <%}%> ><%=artist.name%>
+              </option>
               <%}) }%>
             </select>
             <label for="released">Released:</label>
-            <input type="text" placeholder="YYYY" name="released"
-            value=<%!locals.released ? '': album.released %>>
+            <input
+              type="text"
+              placeholder="YYYY"
+              name="released"
+              value="<%=!locals.album ? '': album.released %>"
+            />
             <label for="released">Label:</label>
-            <input type="text" placeholder="Universal Music" name="label"
-            value=<%!locals.label ? '': album.label %>>
+            <input
+              type="text"
+              placeholder="Universal Music"
+              name="label"
+              value="<%=!locals.album ? '': album.label %>"
+            />
             <label for="genre">Genre:</label>
             <div class="form-genre-container">
               <% if (!genres.length) {%> No genres defined. <%} else {%><%
               genres.forEach((genre) => { %>
               <div class="form-genre-checkbox">
-                <input type="checkbox" name="genre" value="<%=genre._id%>" />
-                <label for="<%=genre%>"><%=genre.name%></label>
+                <input type="checkbox" name="genre" value="<%=genre._id%>" id="<%=genre._id%>"
+                <% if (locals.genres && genre.checked === 'true') { %>
+                  checked <%}%>/>
+                <label for="<%=genre._id%>"><%=genre.name%></label>
               </div>
               <%})}%>
             </div>
