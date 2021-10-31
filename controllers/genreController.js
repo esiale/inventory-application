@@ -139,12 +139,42 @@ exports.genre_create_post = [
   },
 ];
 
-exports.genre_delete_get = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.genre_delete_get = (req, res, next) => {
+  const fetch_genre = Genre.findById(req.params.id).exec();
+  const fetch_albums = Album.find({ genre: req.params.id })
+    .populate('artist')
+    .exec();
+  Promise.all([fetch_genre, fetch_albums])
+    .then((results) => {
+      if (results[0] === null) return res.redirect('/genres');
+      res.render('genre_delete', {
+        title: 'InventoryApp - delete genre',
+        genre: results[0],
+        albums: results[1],
+      });
+    })
+    .catch((error) => next(error));
 };
 
-exports.genre_delete_post = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.genre_delete_post = (req, res, next) => {
+  const fetch_genre = Genre.findById(req.params.id).exec();
+  const fetch_albums = Album.find({ genre: req.params.id }).exec();
+  Promise.all([fetch_genre, fetch_albums])
+    .then((results) => {
+      if (results[1].length > 0) {
+        return res.render('genre_delete', {
+          title: 'InventoryApp - delete genre',
+          genre: results[0],
+          albums: results[1],
+        });
+      } else {
+        Genre.findByIdAndRemove(req.params.id, (error) => {
+          if (error) return next(error);
+          res.redirect('/genres');
+        });
+      }
+    })
+    .catch((error) => next(error));
 };
 
 exports.genre_update_get = function (req, res) {
