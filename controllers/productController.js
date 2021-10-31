@@ -138,10 +138,72 @@ exports.product_delete_post = (req, res, next) => {
   });
 };
 
-exports.product_update_get = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.product_update_get = (req, res, next) => {
+  const fetch_product = Product.findById(req.params.id).exec();
+  const fetch_albums = Album.find().exec();
+  const fetch_formats = Format.find().exec();
+  Promise.all([fetch_product, fetch_albums, fetch_formats]).then((results) => {
+    if (results[0] === null) {
+      const error = new Error('Product not found');
+      error.status = 404;
+      return next(error);
+    }
+    res.render('product_form', {
+      title: 'InventoryApp - update product',
+      product: results[0],
+      albums: results[1],
+      formats: results[2],
+    });
+  });
 };
 
-exports.product_update_post = function (req, res) {
-  res.send('NOT IMPLEMENTED');
-};
+exports.product_update_post = [
+  body('album').trim().notEmpty().withMessage('* Album is required').escape(),
+  body('price')
+    .trim()
+    .notEmpty()
+    .withMessage('* Price is required')
+    .isInt()
+    .withMessage('* Price must be a number')
+    .escape(),
+  body('number_in_stock')
+    .trim()
+    .notEmpty()
+    .withMessage('* Number in stock is required')
+    .isInt()
+    .withMessage('* Number in stock must be a number')
+    .escape(),
+  body('format').trim().notEmpty().withMessage('* Format is required').escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const product = new Product({
+      album: req.body.album,
+      price: req.body.price,
+      number_in_stock: req.body.number_in_stock,
+      format: req.body.format,
+      _id: req.params.id,
+    });
+    if (!errors.isEmpty()) {
+      const fetch_albums = Album.find().exec();
+      const fetch_formats = Format.find().exec();
+      Promise.all([fetch_albums, fetch_formats]).then((results) => {
+        res.render('product_form', {
+          title: 'InventoryApp - update product',
+          albums: results[0],
+          formats: results[1],
+          product: product,
+          errors: errors.array({ onlyFirstError: true }),
+        });
+      });
+    } else {
+      Product.findByIdAndUpdate(
+        req.params.id,
+        product,
+        (error, updatedProduct) => {
+          if (error) return next(error);
+          res.redirect(updatedProduct.url);
+        }
+      );
+    }
+  },
+];

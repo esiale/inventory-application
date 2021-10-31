@@ -12,8 +12,12 @@
           <h1>Add new genre</h1>
           <form method="post" action="">
             <label for="name">Genre:</label>
-            <input type="text" placeholder="Name" name="name"
-            value=<%=!locals.genre ? '': genre.name %>>
+            <input
+              type="text"
+              placeholder="Name"
+              name="name"
+              value="<%=!locals.genre ? '': genre.name %>"
+            />
             <button type="submit">Submit</button>
           </form>
           <ul>

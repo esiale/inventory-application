@@ -29,14 +29,14 @@
               type="number"
               placeholder="19.99"
               name="price"
-              value="<%!locals.product ? '': product.price %>"
+              value="<%=!locals.product ? '': product.price %>"
             />
             <label for="number_in_stock">Number in stock:</label>
             <input
               type="number"
               placeholder="1"
               name="number_in_stock"
-              value="<%!locals.number_in_stock ? '': product.number_in_stock %>"
+              value="<%=!locals.product ? '': product.number_in_stock %>"
             />
             <label for="format">Format:</label>
             <select name="format">

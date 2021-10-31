@@ -12,8 +12,12 @@
           <h1>Add new artist</h1>
           <form method="post" action="" enctype="multipart/form-data">
             <label for="name">Artist:</label>
-            <input type="text" placeholder="Name" name="name"
-            value=<%=!locals.artist ? '': artist.name %>>
+            <input
+              type="text"
+              placeholder="Name"
+              name="name"
+              value="<%=!locals.artist ? '': artist.name %>"
+            />
             <label for="image">Image (optional):</label>
             <span class="file-restrictions"
               >Max. 5mb, recommended dimensions: min. 300x300px</span

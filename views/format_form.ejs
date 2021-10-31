@@ -12,8 +12,12 @@
           <h1>Add new format</h1>
           <form method="post" action="">
             <label for="name">Format:</label>
-            <input type="text" placeholder="Name" name="name"
-            value=<%=!locals.format ? '': format.name %>>
+            <input
+              type="text"
+              placeholder="Name"
+              name="name"
+              value="<%=!locals.format ? '': format.name %>"
+            />
             <button type="submit">Submit</button>
           </form>
           <ul>

@@ -118,10 +118,47 @@ exports.format_delete_post = (req, res, next) => {
     .catch((error) => next(error));
 };
 
-exports.format_update_get = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.format_update_get = (req, res, next) => {
+  Format.findById(req.params.id, (error, results) => {
+    if (error) return next(error);
+    if (results === null) {
+      const error = new Error('Format not found');
+      error.status = 404;
+      return next(error);
+    }
+    res.render('format_form', {
+      title: 'InventoryApp - update format',
+      format: results,
+    });
+  });
 };
 
-exports.format_update_post = function (req, res) {
-  res.send('NOT IMPLEMENTED');
-};
+exports.format_update_post = [
+  body('name')
+    .trim()
+    .notEmpty()
+    .withMessage('* Format name is required')
+    .isLength({ max: 50 })
+    .withMessage('* Format name must be 50 characters or less')
+    .escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const format = new Format({ name: req.body.name, _id: req.params.id });
+    if (!errors.isEmpty()) {
+      res.render('format_form', {
+        title: 'InventoryApp - update format',
+        format: format,
+        errors: errors.array({ onlyFirstError: true }),
+      });
+    } else {
+      Format.findByIdAndUpdate(
+        req.params.id,
+        format,
+        (error, updatedFormat) => {
+          if (error) return next(error);
+          res.redirect(updatedFormat.url);
+        }
+      );
+    }
+  },
+];
