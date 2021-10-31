@@ -80,12 +80,42 @@ exports.format_create_post = [
   },
 ];
 
-exports.format_delete_get = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.format_delete_get = (req, res, next) => {
+  const fetch_format = Format.findById(req.params.id).exec();
+  const fetch_products = Product.find({ format: req.params.id })
+    .populate('album')
+    .exec();
+  Promise.all([fetch_format, fetch_products])
+    .then((results) => {
+      if (results[0] === null) return res.redirect('/formats');
+      res.render('format_delete', {
+        title: 'InventoryApp - delete format',
+        format: results[0],
+        products: results[1],
+      });
+    })
+    .catch((error) => next(error));
 };
 
-exports.format_delete_post = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.format_delete_post = (req, res, next) => {
+  const fetch_format = Format.findById(req.params.id).exec();
+  const fetch_products = Product.find({ format: req.params.id }).exec();
+  Promise.all([fetch_format, fetch_products])
+    .then((results) => {
+      if (results[1].length > 0) {
+        return res.render('format_delete', {
+          title: 'InventoryApp - delete format',
+          format: results[0],
+          products: results[1],
+        });
+      } else {
+        Format.findByIdAndRemove(req.params.id, (error) => {
+          if (error) return next(error);
+          res.redirect('/formats');
+        });
+      }
+    })
+    .catch((error) => next(error));
 };
 
 exports.format_update_get = function (req, res) {
