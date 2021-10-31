@@ -117,12 +117,25 @@ exports.product_create_post = [
   },
 ];
 
-exports.product_delete_get = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.product_delete_get = (req, res, next) => {
+  Product.findById(req.params.id)
+    .populate('album')
+    .populate('format')
+    .exec((error, results) => {
+      if (error) return next(error);
+      if (results === null) return res.redirect('/products');
+      res.render('product_delete', {
+        title: 'InventoryApp - delete artist',
+        product: results,
+      });
+    });
 };
 
-exports.product_delete_post = function (req, res) {
-  res.send('NOT IMPLEMENTED');
+exports.product_delete_post = (req, res, next) => {
+  Product.findByIdAndRemove(req.params.id, (error) => {
+    if (error) return next(error);
+    res.redirect('/products');
+  });
 };
 
 exports.product_update_get = function (req, res) {
