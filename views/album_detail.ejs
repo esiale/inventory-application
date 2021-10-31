@@ -47,9 +47,10 @@
             </ul>
             <%}%>
           </div>
-          <a href="<%=album_detail.url%>/delete"
-            ><button class="delete-btn">Delete</button></a
-          >
+          <div class="button-container">
+            <a href="<%=album_detail.url%>/delete"><button>Delete</button></a>
+            <a href="<%=album_detail.url%>/update"><button>Update</button></a>
+          </div>
         </div>
       </main>
       <%- include('./partials/footer'); %>

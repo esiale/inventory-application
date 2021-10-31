@@ -32,7 +32,12 @@
             <span class="warning"
               >This action can't be reversed! Are you sure?</span
             >
-            <button type="submit">Delete</button>
+            <div class="button-container">
+              <button type="submit">Delete</button>
+              <a href="<%=format.url%>"
+                ><button type="button">Cancel</button></a
+              >
+            </div>
           </form>
           <%}%>
         </div>

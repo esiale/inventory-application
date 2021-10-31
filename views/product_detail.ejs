@@ -28,9 +28,10 @@
             </div>
             <img src="<%= result.album.picture_url %>" />
           </div>
-          <a href="<%=result.url%>/delete"
-            ><button class="delete-btn">Delete</button></a
-          >
+          <div class="button-container">
+            <a href="<%=result.url%>/delete"><button>Delete</button></a>
+            <a href="<%=result.url%>/update"><button>Update</button></a>
+          </div>
         </div>
       </main>
       <%- include('./partials/footer'); %>

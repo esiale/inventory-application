@@ -39,11 +39,10 @@
               <%})%>
             </ul>
             <%}%>
-          </div>
-          <a href="<%=artist_detail.url%>/delete"
-            ><button class="delete-btn">Delete</button></a
-          >
-        </div>
+            <div class="button-container">
+              <a href="<%=artist_detail.url%>/delete"><button>Delete</button></a>
+              <a href="<%=artist_detail.url%>/update"><button>Update</button></a>
+            </div>
       </main>
       <%- include('./partials/footer'); %>
     </div>

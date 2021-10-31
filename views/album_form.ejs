@@ -32,9 +32,9 @@
               type="text"
               placeholder="YYYY"
               name="released"
-              value="<%=!locals.album ? '': album.released %>"
+              value="<%=!locals.album ? '': album.released.getFullYear() %>"
             />
-            <label for="released">Label:</label>
+            <label for="label">Label:</label>
             <input
               type="text"
               placeholder="Universal Music"

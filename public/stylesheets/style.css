@@ -201,7 +201,9 @@ button {
   transition: background-color 100ms ease-in;
 }
 
-.delete-btn {
+.button-container {
+  display: flex;
+  gap: 10px;
   margin-top: 15px;
 }
 
