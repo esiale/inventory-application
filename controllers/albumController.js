@@ -142,7 +142,7 @@ exports.album_create_post = [
             } else {
               const picture_id = `img-${uuidv4()}`;
               await processImage(req, next, picture_id);
-              album.picture_url = `/images/${picture_id}`;
+              album.picture_url = `/images/${picture_id}.jpeg`;
             }
             album.save((err) => {
               if (err) return next(err);

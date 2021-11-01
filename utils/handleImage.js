@@ -8,7 +8,8 @@ const processImage = async (req, next, id) => {
   try {
     sharp(req.file.buffer)
       .resize(300)
-      .toFile('./public/images/' + id);
+      .jpeg()
+      .toFile('./public/images/' + id + '.jpeg');
   } catch (err) {
     next(err);
   }

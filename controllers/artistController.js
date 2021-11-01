@@ -129,7 +129,7 @@ exports.artist_create_post = [
             } else {
               const picture_id = `img-${uuidv4()}`;
               await processImage(req, next, picture_id);
-              artist.picture_url = `/images/${picture_id}`;
+              artist.picture_url = `/images/${picture_id}.jpeg`;
             }
             artist.save((err) => {
               if (err) return next(err);
