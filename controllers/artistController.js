@@ -6,6 +6,7 @@ const {
   uploadImage,
   processImage,
   validateFile,
+  deleteImage,
 } = require('../utils/handleImage');
 const { body, validationResult } = require('express-validator');
 
@@ -169,10 +170,12 @@ exports.artist_delete_post = (req, res, next) => {
           albums: results[1],
         });
       } else {
-        Artist.findByIdAndRemove(req.params.id, (error) => {
-          if (error) return next(error);
-          res.redirect('/artists');
-        });
+        const delete_artist = Artist.findByIdAndRemove(req.params.id).exec();
+        Promise.all([delete_artist, deleteImage(results[0])])
+          .then(() => {
+            res.redirect('/artists');
+          })
+          .catch((error) => next(error));
       }
     })
     .catch((error) => next(error));
@@ -213,21 +216,34 @@ exports.artist_update_post = [
         errors: errors.array({ onlyFirstError: true }),
       });
     } else {
+      const updateArtist = () => {
+        Artist.findByIdAndUpdate(
+          req.params.id,
+          artist,
+          (error, updatedArtist) => {
+            if (error) return next(error);
+            res.redirect(updatedArtist.url);
+          }
+        );
+      };
       if (!req.file) {
         artist.picture_url = req.body.picture_url;
+        updateArtist();
       } else {
-        const picture_id = `img-${uuidv4()}`;
-        await processImage(req, next, picture_id);
-        artist.picture_url = `/images/${picture_id}`;
+        const fetch_artist = Artist.findById(req.params.id).exec();
+        await fetch_artist
+          .then((result) => {
+            const picture_id = `img-${uuidv4()}`;
+            Promise.all([
+              deleteImage(result),
+              processImage(req, next, picture_id),
+            ]).then(() => {
+              artist.picture_url = `/images/${picture_id}.jpeg`;
+              updateArtist();
+            });
+          })
+          .catch((error) => next(error));
       }
-      Artist.findByIdAndUpdate(
-        req.params.id,
-        artist,
-        (error, updatedArtist) => {
-          if (error) return next(error);
-          res.redirect(updatedArtist.url);
-        }
-      );
     }
   },
 ];

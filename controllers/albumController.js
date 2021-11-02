@@ -8,6 +8,7 @@ const {
   uploadImage,
   processImage,
   validateFile,
+  deleteImage,
 } = require('../utils/handleImage');
 const { body, validationResult } = require('express-validator');
 
@@ -184,10 +185,12 @@ exports.album_delete_post = (req, res, next) => {
           products: results[1],
         });
       } else {
-        Album.findByIdAndRemove(req.params.id, (error) => {
-          if (error) return next(error);
-          res.redirect('/albums');
-        });
+        const delete_album = Album.findByIdAndRemove(req.params.id).exec();
+        Promise.all([delete_album, deleteImage(results[0])])
+          .then(() => {
+            res.redirect('/albums');
+          })
+          .catch((error) => next(error));
       }
     })
     .catch((error) => next(error));
@@ -280,17 +283,35 @@ exports.album_update_post = [
         })
         .catch((error) => next(error));
     } else {
+      const updateAlbum = () => {
+        Album.findByIdAndUpdate(
+          req.params.id,
+          album,
+          { new: true },
+          (error, updatedAlbum) => {
+            if (error) return next(error);
+            res.redirect(updatedAlbum.url);
+          }
+        );
+      };
       if (!req.file) {
         album.picture_url = req.body.picture_url;
+        updateAlbum();
       } else {
-        const picture_id = `img-${uuidv4()}`;
-        await processImage(req, next, picture_id);
-        album.picture_url = `/images/${picture_id}`;
+        const fetch_album = Album.findById(req.params.id).exec();
+        await fetch_album
+          .then((result) => {
+            const picture_id = `img-${uuidv4()}`;
+            Promise.all([
+              deleteImage(result),
+              processImage(req, next, picture_id),
+            ]).then(() => {
+              album.picture_url = `/images/${picture_id}.jpeg`;
+              updateAlbum();
+            });
+          })
+          .catch((error) => next(error));
       }
-      Album.findByIdAndUpdate(req.params.id, album, (error, updatedAlbum) => {
-        if (error) return next(error);
-        res.redirect(updatedAlbum.url);
-      });
     }
   },
 ];

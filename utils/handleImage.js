@@ -1,5 +1,7 @@
 const sharp = require('sharp');
 const multer = require('multer');
+const fs = require('fs').promises;
+const path = require('path');
 
 const storage = multer.memoryStorage();
 const uploadImage = multer({ storage });
@@ -39,4 +41,10 @@ const validateFile = (req, res, next) => {
   next();
 };
 
-module.exports = { uploadImage, processImage, validateFile };
+const deleteImage = (item) => {
+  if (item.picture_url !== '/images/no_image.svg') {
+    return fs.unlink(path.join('public/' + item.picture_url));
+  }
+};
+
+module.exports = { uploadImage, processImage, validateFile, deleteImage };
